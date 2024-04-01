@@ -1,0 +1,41 @@
+<div id="{{mainId}}">
+    <div class='container'>
+        <h2 class='mt-3'>Είσοδος Χρήστη</h2>
+        {{#if newusermessage}}
+        <div class="alert alert-primary mt-3" role="alert">
+            {{newusermessage}}
+        </div>
+        {{/if}}
+        <form action='/books' method='post'>
+            <div class='mb-3'>
+                <label for='username' class='form-label'>Ονομα Χρήστη</label>
+                <input
+                    type='text'
+                    class='form-control {{#if message.username}}is-invalid{{/if}}'
+                    id='username'
+                    name='username'
+                    value='{{username}}'
+                    placeholder="Εισάγετε Ονομα Χρήστη..."
+                />
+                <div class="invalid-feedback">{{message.username.msg}}</div>
+            </div>
+            <div class='mb-3'>
+                <label for='password' class='form-label'>Συνθηματικό</label>
+                <input
+                    type='password'
+                    class='form-control {{#if message.password}}is-invalid{{/if}}'
+                    id='password'
+                    name='password'
+                    value='{{password}}'
+                    placeholder="Εισάγετε Συνθηματικό..."
+                />
+                <div class="invalid-feedback">{{message.password.msg}}</div>
+            </div>
+            
+            <button type='submit' class='btn btn-submit-custom'>Υποβόλη</button>
+        </form>
+        <hr>
+        <div class="mb-3">Αν δεν έχετε λογαριασμό, παρακαλώ πατήστε τον παρακάτω σύνδεσμο για να δημιουργήσετε έναν καινούργιο.</div>
+        <a href="/register">Δημιουργία καινούργιου λογαριασμού</a>
+    </div>
+</div>
