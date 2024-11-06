@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from '../config/dbConfig.mjs';
+import { sequelize } from '../config/dbConfig.js';
 
 
 

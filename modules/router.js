@@ -1,8 +1,8 @@
 import express from 'express';
-import * as Validation from '../validator/validation.mjs';
-import * as UserController from '../controller/user_controller.mjs';
-import * as BooksController from '../controller/books_controller.mjs';
-import { pages, currentYear } from '../config/attributes.mjs';
+import * as Validation from '../validator/validation.js';
+import * as UserController from '../controller/user_controller.js';
+import * as BooksController from '../controller/books_controller.js';
+import { pages, currentYear } from '../config/attributes.js';
 
 const router = express.Router();
 
@@ -48,15 +48,15 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.get('/books',
-    UserController.checkIfAuthenticated,
-    BooksController.showBookList);
-
-router.post('/books',
-    Validation.validateLogin,
-    UserController.doLogin,
-    BooksController.showBookList
-);
+router.route('/books')
+    .get(
+        UserController.checkIfAuthenticated,
+        BooksController.showBookList)
+    .post(
+        Validation.validateLogin,
+        UserController.doLogin,
+        BooksController.showBookList
+    );
 
 router.get('/addbookform',
     UserController.checkIfAuthenticated,
@@ -68,10 +68,29 @@ router.get('/addbookform',
         res.render('bookform');
     });
 
+
 router.post('/doaddbook',
     UserController.checkIfAuthenticated,
     Validation.validateNewBook,
     BooksController.addNewBook
+);
+
+/* Τελική εργασία:
+ * @Endpoint: '/comments/:id'
+ * @Method: GET / Παρουσίαση φόρμας σχολίων
+ */
+router.get('/comments/:id',
+    UserController.checkIfAuthenticated,
+    BooksController.showComments
+);
+/* Τελική εργασία:
+ * @Endpoint: '/doaddcomment'
+ * @Method: POST / Υποβολή σχολίου
+ */
+router.post('/doaddcomment',
+    UserController.checkIfAuthenticated,
+    Validation.validateNewComment,
+    BooksController.addNewComment
 );
 
 /* Middleware to delete a book. When we turn this to a REST API, we need to replace this middlewere 
@@ -90,7 +109,7 @@ router.get('/logout',
 );
 
 /* This middleware MUST come LAST, to ensure that ANY other requested path, different to the paths, for which
- * special handlers are defined in the router will be redirected to the Home page. If we place this middleware
+ * special handlers are defined in the router, will be redirected to the Home page. If we place this middleware
  * above any path handler, this middleware would have intercepted that path first, and would have caused
  * a redirection instead of the proper handling of the path in question. */
 router.use((req, res) => {

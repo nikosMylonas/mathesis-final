@@ -2,7 +2,7 @@ import express from "express";
 import 'dotenv/config';
 import session from 'express-session';
 import { engine } from 'express-handlebars';
-import { router } from './modules/router.mjs';
+import { router } from './modules/router.js';
 import createMemoryStore from 'memorystore';
 
 const MemoryStore = createMemoryStore(session);

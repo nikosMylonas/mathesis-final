@@ -53,8 +53,12 @@
                             {{this.year}}
                         </div>
                         <hr>
-                        <button type="button" class="btn btn-danger btn-delete-custom" data-bs-toggle="modal" data-bs-target="#deleteModal-{{this.bookId}}">Delete <span>{{this.bookTitle}}</span></button>
+                        <div>
+                        <button type="button" class="btn btn-danger btn-delete-custom" data-bs-toggle="modal" data-bs-target="#deleteModal-{{this.bookId}}">Διαγραφή</button>
                         {{!-- <a type="button" class="btn btn-danger btn-delete " href="/delete/{{this.bookId}}">Delete <span>Βιβλίο: {{this.bookTitle}}</span></a>  --}}
+                        <a type="button" class="btn btn-info btn-btn-comments block mb-3" href="/comments/{{this.bookId}}">Σχόλια...</a>
+
+                        </div>
                     </div>
                 </div>
             {{/each}}
@@ -62,7 +66,6 @@
     {{/if}}
     {{#unless books}}
         <div class='alert alert-warning' role='alert'>
-            {{!-- No books registered! --}}
             Δεν έχετε καταχωρήσει κάποιο βιβλίο στην λίστα σας!
         </div>
     {{/unless}}

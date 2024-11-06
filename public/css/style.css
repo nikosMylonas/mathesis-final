@@ -64,7 +64,8 @@ nav a.active {
     background: var(--btn-add-hover);
     color: white;
 }
-#booklist .btn-delete-custom {
+#booklist .btn-delete-custom,
+.btn-comments {
     /* background-color: #aa0001 !important;
     color: white; */
     margin-left: 1.5rem;

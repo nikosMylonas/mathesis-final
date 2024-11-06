@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
-import validator from 'validator';
-import { pages } from '../config/attributes.mjs';
+// import validator from 'validator';
+import { pages } from '../config/attributes.js';
 
 const validateLogin = [
     body('username') // 1c. Validate username input
@@ -70,8 +70,7 @@ const validateNewBook = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            next()
-
+            next();
         } else {
             res.locals.username = req.session.username;
             res.locals.pageTitle = pages.addForm.title;
@@ -119,6 +118,26 @@ const validateNewUser = [
             });
         }
     }
-]
+];
 
-export { validateLogin, validateNewBook, validateNewUser };
+/* Validator για την υποβολή σχολίων. Σαν βασική εφαρμογή, κάνει μόνο sanitization */
+const validateNewComment = [
+    body('comment').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            next();
+        } else {
+            res.locals.username = req.session.username;
+            res.locals.pageTitle = pages.commentForm.title;
+            res.locals.mainId = pages.commentForm.mainId;
+            res.locals.commentFormActive = pages.commentForm.addCommentActive;
+            res.render('commentsform', {
+                message: errors.mapped(),
+            });
+        }
+    }
+];
+
+export { validateLogin, validateNewBook, validateNewUser, validateNewComment };

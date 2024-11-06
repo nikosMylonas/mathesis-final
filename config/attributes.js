@@ -14,6 +14,11 @@ const pages = {
         title: ' | Add Book',
         addFormActive: true
     },
+    commentForm: {
+        mainId: 'comment-book',
+        title: ' | Add Comment',
+        addCommentActive: true
+    },
     login: {
         mainId: 'login',
         title: ' | Login',

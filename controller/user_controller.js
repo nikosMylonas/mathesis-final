@@ -1,5 +1,5 @@
-import * as BookList from '../modules/bookList.mjs';
-import { pages } from '../config/attributes.mjs';
+import * as BookList from '../modules/bookList.js';
+import { pages } from '../config/attributes.js';
 
 function checkIfAuthenticated(req, res, next) {
     if (req.session.username) {

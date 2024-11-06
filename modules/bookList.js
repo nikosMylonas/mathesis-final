@@ -3,7 +3,7 @@
  * Change the name of the file to: bookList.mjs
  */
 import bcrypt from 'bcrypt';
-import { Book, Author, Editor, User, BookUser } from '../models/models.mjs';
+import { Book, Author, Editor, User, BookUser } from '../models/models.js';
 
 /* 4.1.4: User registration function: */
 async function registerUser(username, password) {
@@ -115,7 +115,6 @@ async function deleteBook(id, username) {
         if (!user) {
             throw new Error('Αγνωστος χρήστης.')
         }
-
         const bookToRemove = await findBookById(id, false);
         // IMPORTANT: The helper method removeUser() works here BECAUSE the bookToRemove object is created with the flag rawFlag set to false!
         await bookToRemove.removeUser(user); // Unties the user in question from this particular book.
@@ -130,8 +129,10 @@ async function deleteBook(id, username) {
     }
 }
 
-/* This method is used by Deleted Book page to fetch the data of the book just deleted by the user. Since
- * the book can have been deleted entirely, this method MUST be called BEFORE the deleteBook method. */
+/* This method is used by Deleted Book page to fetch the data of the book just deleted by the user, so the
+ *app can dispaly a message to the user in the modal window. Since the book can be deleted from the DB too,
+ * this method MUST be called BEFORE the deleteBook method. */
+/* This method is used also to retrieve Book, and Author data to be displayed in the Add Comment Form. */
 async function findBookById(id, rawFlag) {
     try {
         const bookToQuery = await Book.findOne({ where: { id }, include: [Author, Editor], raw: rawFlag });
@@ -170,7 +171,53 @@ async function checkBookUserIfExists(title, authorName, username) {
     }
 }
 
-export { registerUser, login, loadBooks, addBookFn, checkBookUserIfExists, findBookById, deleteBook };
+
+/* Λίστα σχολίων για ένα βιβλίο (όλοι οι χρήστες)*/
+async function loadAllComments(username, bookId) {
+    try {
+        if (!username) {
+            throw new Error('Πρέπει να δωθεί όνομα χρήστη.');
+        }
+        const user = await User.findOne({ where: { name: username } });
+        if (!user) {
+            throw new Error('Αγνωστος χρήστης.');
+        }
+
+        const comments = await BookUser.findAll({
+            attributes: ['comment', 'UserName'],
+            where: { BookId: bookId },
+            raw: true
+        });
+        return comments;
+        // console.log('loading...', this.myBooks);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+/* Προσθήκη σχολίων - Επειδή, για να γραφεί κάποιο σχόλιο, πρέπει να υπάρχει ήδη ο συνδυασμός (UserName, BookId),
+ * προσθέτουμε το σχόλιο με UPDATE στην συγκεκριμένη εγγραφή (η αρχική τιμή του σχολίου είναι NULL) */
+async function addComment(comment, username, bookId) {
+    try {
+        if (!username) {
+            throw new Error('Πρέπει να δωθεί όνομα χρήστη.');
+        }
+        const user = await User.findOne({ where: { name: username }, raw: true });
+        if (!user) {
+            throw new Error('Αγνωστος χρήστης.')
+        }
+
+        await BookUser.update({ comment }, { where: { UserName: user.name, BookId: bookId } });
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+
+}
+
+export { registerUser, login, loadBooks, addBookFn, checkBookUserIfExists, findBookById, deleteBook, addComment, loadAllComments };
 
 
 

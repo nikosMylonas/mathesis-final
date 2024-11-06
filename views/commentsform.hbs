@@ -1,0 +1,84 @@
+<div id='{{mainId}}'>
+    <div class='container'>
+        <div id='comment-form'>
+            <h2 class='mt-3'>Προσθήκη Νέου Σχολίου</h2>
+            <form action='/doaddcomment' method='post'>
+                <input
+                    type='hidden'
+                    id='bookId'
+                    name='bookId'
+                    value={{bookId}}
+                />
+                <div class='mb-3'>
+                    <label for='bookTitle' class='form-label'>Τίτλος</label>
+                    <input
+                        type='text'
+                        class='form-control'
+                        id='newBookTitle'
+                        name='title'
+                        value='{{bookTitle}}'
+                        aria-label='Disabled input title'
+                        disabled
+                    />
+                </div>
+
+                <div class='mb-3'>
+                    <label
+                        for='bookAuthor'
+                        class='form-label'
+                    >Συγγραφέας</label>
+                    <input
+                        type='text'
+                        class='form-control'
+                        id='bookAuthor'
+                        name='author'
+                        value='{{authorName}}'
+                        aria-label='Disabled input author'
+                        disabled
+                    />
+                </div>
+                <div class='mb-3'>
+                    <label for='comment' class='form-label'>Σχόλιο</label>
+                    <input
+                        type='text'
+                        class='form-control'
+                        id='comment'
+                        name='comment'
+                        value='{{currentComment}}'
+                        placeholder='Σχόλιο...'
+                    />
+                </div>
+                <button
+                    type='submit'
+                    class='btn btn-submit-custom'
+                >Προσθήκη</button>
+            </form>
+        </div>
+        <div id='comment-list'>
+            <h2 class='my-3'>Σχόλια
+                <span class='badge bg-secondary'>{{numberComments}}</span></h2>
+            {{#unless numberComments}}
+                <div class='alert alert-secondary text-center' role='alert'>
+                    Δεν υπάρχουν σχόλια για το συγκεκριμένο βιβλίο.
+                </div>
+            {{/unless}}
+            {{#if numberComments}}
+                <table class='table table-bordered'>
+                    <tr>
+                        <td
+                            colspan='2'
+                            class='bg-info text-white h4'
+                        >{{bookTitle}}</td>
+                    </tr>
+                    {{#each activeComments}}
+                        <tr>
+                            <td>{{this.comment}}</td>
+                            <td>{{this.UserName}}</td>
+                        </tr>
+                    {{/each}}
+
+                </table>
+            {{/if}}
+        </div>
+    </div>
+</div>
